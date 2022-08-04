@@ -7,13 +7,8 @@ import PRODUCTS from '../PRODUCTS';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetRefProps } from '../components/BottomSheet';
 import { StatusBar } from 'expo-status-bar';
-import {
-    PagerTabIndicator,
-    IndicatorViewPager,
-    PagerTitleIndicator,
-    PagerDotIndicator,
-  } from '@shankarmorwal/rn-viewpager';
-
+import {useDispatch} from "react-redux";
+import {addItem, minusItem} from "../features/cart/cartSlice";
 
 const slides = [
     {
@@ -29,7 +24,10 @@ const slideHeight = viewportHeight * 0.8
 
 const ProductInner = ({navigation, route}: boolean) => {
     const {id} = route.params;
-    const {name, shortDescription, price} = PRODUCTS.filter(item => item.id === id)[0]
+    const product = PRODUCTS.filter(item => item.id === id)[0];
+    const {name, shortDescription, price} = product;
+
+    const dispatch = useDispatch();
 
     const [productCount, setProductCount] = useState(1);
 
@@ -41,6 +39,13 @@ const ProductInner = ({navigation, route}: boolean) => {
         setProductCount(Math.max(1, productCount - 1))
     }
 
+    const addToCart = () => {
+        dispatch(addItem({
+            product,
+            quantity: productCount
+        }));
+    }
+
     const ref = useRef<BottomSheetRefProps>(null);
 
 
@@ -48,29 +53,13 @@ const ProductInner = ({navigation, route}: boolean) => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <StatusBar translucent={true}/>
             <View style={styles.container}>
-                <View style={styles.slider}>
-                    <IndicatorViewPager
-                       style={{flex: 1, paddingTop: 20, backgroundColor: 'white'}}
-                       indicator={<PagerDotIndicator pageCount={3} />}>
-                        <View>
-                            <Image
-                                style={styles.image}
-                                source={{
-                                    uri: 'https://cdn.shopify.com/s/files/1/0081/7374/8305/products/Facial_Recovery_Serum_30ml_FL_01_1200x1200.jpg?v=1599504591',
-                                }}
-                            /> 
-                        </View>
-                        <View>
-                            <Image
-                                style={styles.image}
-                                source={{
-                                    uri: 'https://cdn.shopify.com/s/files/1/0081/7374/8305/products/Facial_Recovery_Serum_30ml_FL_01_1200x1200.jpg?v=1599504591',
-                                }}
-                            /> 
-                        </View>
-                    </IndicatorViewPager>  
-                </View>
-            <BottomSheet
+                <Image
+                    style={styles.image}
+                    source={{
+                        uri: 'https://cdn.shopify.com/s/files/1/0081/7374/8305/products/Facial_Recovery_Serum_30ml_FL_01_1200x1200.jpg?v=1599504591',
+                    }}
+                />
+                <BottomSheet
                 onUpdate={(value) => console.log(value)}
                 ref={ref}>
                 <View style={styles.content}>
@@ -149,7 +138,8 @@ const ProductInner = ({navigation, route}: boolean) => {
                                             size={10}/> 
                                     </Pressable>
                                 </View>
-                                <Pressable 
+                                <Pressable
+                                    onPress={addToCart}
                                 style={({ pressed }) => [
                                         {
                                             backgroundColor: pressed ? 'rgba(28, 28, 28, .8)' : 'rgba(28, 28, 28, 1)'
