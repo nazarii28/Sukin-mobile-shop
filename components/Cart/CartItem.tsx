@@ -10,7 +10,7 @@ interface CartItemProps {
     onClose: () => void;
     image: string;
     name: string;
-    price: string;
+    price: number;
     shortDescription: string
 }
 

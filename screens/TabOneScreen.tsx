@@ -8,10 +8,14 @@ import {RootTabScreenProps} from '../types';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import PRODUCTS from '../PRODUCTS';
 import ProductCard from '../components/ProductCard';
+import { useGetProductsQuery } from '../services/products';
+import {useEffect} from "react";
 
 let count = 0
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
+
+    const {data: products, isLoading} = useGetProductsQuery();
 
     return (
         <View style={styles.container}>
@@ -22,28 +26,31 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 </Pressable>
             </View>
             <ScrollView>
+                {
+                    !isLoading &&
+                    <MasonryList
+                        data={products.data}
+                        contentContainerStyle={{paddingVertical: 20, marginHorizontal: -15}}
+                        keyExtractor={(item): string => item.id}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item, i}) => {
+                            if (i === 0) {
+                                return <Text style={styles.title}>Found {"\n"}10 Results</Text>
+                            } else {
+                                return <ProductCard
+                                    onPress={() => navigation.navigate('ProductInner', {
+                                        id: item.id
+                                    })}
+                                    title={item.attributes.title}
+                                    description={item.attributes.shortDescription}
+                                    image={'http://10.0.2.2:1337' + item.attributes.image.data[0].attributes.url}
+                                    price={item.attributes.price}
+                                />
+                            }
+                        }}
+                    />
+                }
 
-                <MasonryList
-                    data={PRODUCTS}
-                    contentContainerStyle={{paddingVertical: 20, marginHorizontal: -15}}
-                    keyExtractor={(item): string => item.id}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({item, i}) => {
-                        if (i === 0) {
-                            return <Text style={styles.title}>Found {"\n"}10 Results</Text>
-                        } else {
-                            return <ProductCard
-                                onPress={() => navigation.navigate('ProductInner', {
-                                    id: item.id
-                                })}
-                                title={item.name}
-                                description={item.shortDescription}
-                                image={item.thumbnail}
-                                price={item.price}
-                            />
-                        }
-                    }}
-                />
             </ScrollView>
         </View>
     );

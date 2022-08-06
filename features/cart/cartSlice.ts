@@ -1,14 +1,14 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { Product } from "../../PRODUCTS";
+import { Product } from "../../types";
 
 
-interface CartItem {
+export interface ICartItem {
     quantity: number
     product: Product
 }
 
 export interface CartState {
-    cartItems: CartItem[],
+    cartItems: ICartItem[],
     totalQuantity: number
 }
 
@@ -27,7 +27,7 @@ export const cartSlice = createSlice({
             state.cartItems = state.cartItems.filter(item => item.product.id !== action.payload);
             state.totalQuantity = calculateTotalQuantity(state);
         },
-        addItem: (state, action: PayloadAction<CartItem>) => {
+        addItem: (state, action: PayloadAction<ICartItem>) => {
             const foundItem = state.cartItems.find(item => item.product.id === action.payload.product.id);
             if(foundItem) {
                 foundItem.quantity += action.payload.quantity;

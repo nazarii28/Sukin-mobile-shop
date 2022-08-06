@@ -8,9 +8,9 @@ import LogoSvg from '../components/Svg/LogoSvg';
 import PromoCodeField from '../components/Cart/PromoCodeField';
 import {useDispatch, useSelector} from "react-redux";
 import { RootState } from "../store";
-import {plusItem, minusItem, removeItem} from "../features/cart/cartSlice";
-import {Product} from "../PRODUCTS";
-
+import {plusItem, minusItem, removeItem, ICartItem} from "../features/cart/cartSlice";
+import {Product} from "../types";
+import { REACT_APP_BACKEND_URL } from "@env";
 
 const Cart = () => {
 
@@ -51,13 +51,13 @@ const Cart = () => {
             <ScrollView style={styles.container}>
                 <StatusBar translucent={true}/>
                 {
-                    cartItems.map(item => (
+                    cartItems.map((item: ICartItem) => (
                         <CartItem
                             key={item.product.id}
-                            image={item.product.thumbnail}
-                            name={item.product.name}
-                            shortDescription={item.product.shortDescription}
-                            price={item.product.price}
+                            image={REACT_APP_BACKEND_URL + item.product.attributes.image.data[0].attributes.url}
+                            name={item.product.attributes.name}
+                            shortDescription={item.product.attributes.shortDescription}
+                            price={item.product.attributes.price}
                             onIncrement={() => incrementProduct(item.product)}
                             onDecrement={() => decrementProduct(item.product)}
                             onClose={() => removeProduct(item.product.id)}

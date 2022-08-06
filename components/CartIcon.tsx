@@ -3,14 +3,17 @@ import {Feather} from "@expo/vector-icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
 
-const CartIcon = ({navigation}) => {
+interface CartIconProps {
+    color?: string
+}
+
+const CartIcon = ({color}: CartIconProps) => {
 
     const totalQuantity = useSelector((state: RootState) => state.cart.totalQuantity);
 
     return (
-        <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate('Cart')}>
+        <View
+            style={styles.button}>
             {
                 totalQuantity > 0 &&
                 <View style={styles.counter}>
@@ -19,8 +22,8 @@ const CartIcon = ({navigation}) => {
                     </Text>
                 </View>
             }
-            <Feather name="shopping-bag" size={23}/>
-        </Pressable>
+            <Feather name="shopping-bag" color={color} size={23}/>
+        </View>
     );
 }
 

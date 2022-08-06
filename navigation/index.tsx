@@ -22,6 +22,7 @@ import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types
 import LinkingConfiguration from './LinkingConfiguration';
 import ProductCard from "../components/ProductCard";
 import CartIcon from '../components/CartIcon';
+import Favorite from "../screens/Favorite";
 
 export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName }) {
     return (
@@ -53,20 +54,13 @@ function RootNavigator() {
                 options={({navigation}) => ({
                     headerTransparent: true,
                     headerRight: () => (
-                        <CartIcon navigation={navigation} />
+                        <Pressable onPress={() => navigation.navigate('Cart')}>
+                            <CartIcon />
+                        </Pressable>
                     )
                 })}
 
                 component={ProductInner}/>
-            <Stack.Screen
-                name="Cart"
-
-                options={{
-                    title: "Shopping Bag",
-                    headerTransparent: true
-                }}
-
-                component={Cart}/>
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{title: 'Oops!'}}/>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
                 <Stack.Screen name="Modal" component={ModalScreen}/>
@@ -88,6 +82,14 @@ function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="TabOne"
             screenOptions={{
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    elevation: 0,
+                    height: 65,
+                    borderRadius: 20,
+                    margin: 20,
+                    backgroundColor: Colors[colorScheme].backgroundLight
+                },
                 tabBarActiveTintColor: Colors[colorScheme].tint,
             }}>
             <BottomTab.Screen
@@ -96,7 +98,7 @@ function BottomTabNavigator() {
                 options={({navigation}: RootTabScreenProps<'TabOne'>) => ({
                     headerTransparent: true,
                     title: 'Tab One',
-                    tabBarIcon: ({color}) => <TabBarIcon name="code" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="list" color={color}/>,
                     headerRight: () => (
                         <Pressable
                             onPress={() => navigation.navigate('Modal')}
@@ -117,11 +119,21 @@ function BottomTabNavigator() {
                 })}
             />
             <BottomTab.Screen
-                name="TabTwo"
-                component={TabTwoScreen}
+                name="Cart"
+                component={Cart}
                 options={{
-                    title: 'Tab Two',
-                    tabBarIcon: ({color}) => <TabBarIcon name="code" color={color}/>,
+                    title: "Shopping Bag",
+                    headerTransparent: true,
+                    tabBarIcon: ({color}) => <CartIcon color={color}/>,
+                }}
+            />
+            <BottomTab.Screen
+                name="Favorite"
+                component={Favorite}
+                options={{
+                    title: "Favorite",
+                    headerTransparent: true,
+                    tabBarIcon: ({color}) => <TabBarIcon name="heart" color={color}/>,
                 }}
             />
         </BottomTab.Navigator>
@@ -135,5 +147,5 @@ function TabBarIcon(props: {
     name: React.ComponentProps<typeof FontAwesome>['name'];
     color: string;
 }) {
-    return <FontAwesome size={30} style={{marginBottom: -3}} {...props} />;
+    return <Feather size={23} {...props} />;
 }

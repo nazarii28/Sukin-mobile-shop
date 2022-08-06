@@ -9,6 +9,8 @@ import BottomSheet, { BottomSheetRefProps } from '../components/BottomSheet';
 import { StatusBar } from 'expo-status-bar';
 import {useDispatch} from "react-redux";
 import {addItem, minusItem} from "../features/cart/cartSlice";
+import { useGetSingleProductQuery } from '../services/products';
+import { REACT_APP_BACKEND_URL } from "@env";
 
 const slides = [
     {
@@ -24,8 +26,10 @@ const slideHeight = viewportHeight * 0.8
 
 const ProductInner = ({navigation, route}: boolean) => {
     const {id} = route.params;
-    const product = PRODUCTS.filter(item => item.id === id)[0];
-    const {name, shortDescription, price} = product;
+    // const product = PRODUCTS.filter(item => item.id === id)[0];
+
+    const {data, isLoading} = useGetSingleProductQuery(id);
+
 
     const dispatch = useDispatch();
 
@@ -39,15 +43,19 @@ const ProductInner = ({navigation, route}: boolean) => {
         setProductCount(Math.max(1, productCount - 1))
     }
 
+    const ref = useRef<BottomSheetRefProps>(null);
+
+    if(isLoading) return <View></View>
+
+    const product = data.data;
+    const {title, shortDescription, price} = product.attributes;
+
     const addToCart = () => {
         dispatch(addItem({
             product,
             quantity: productCount
         }));
     }
-
-    const ref = useRef<BottomSheetRefProps>(null);
-
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -56,7 +64,7 @@ const ProductInner = ({navigation, route}: boolean) => {
                 <Image
                     style={styles.image}
                     source={{
-                        uri: 'https://cdn.shopify.com/s/files/1/0081/7374/8305/products/Facial_Recovery_Serum_30ml_FL_01_1200x1200.jpg?v=1599504591',
+                        uri: REACT_APP_BACKEND_URL + product.attributes.image.data[0].attributes.url,
                     }}
                 />
                 <BottomSheet
@@ -71,7 +79,7 @@ const ProductInner = ({navigation, route}: boolean) => {
                         }}
                     >
                             <View>
-                                <Text style={styles.title}>{name}</Text>
+                                <Text style={styles.title}>{title}</Text>
                                 <Text style={styles.shortDescription}>{shortDescription}</Text>
                             </View>
                             <View>
