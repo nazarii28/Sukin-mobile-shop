@@ -25,11 +25,11 @@ const Cart = () => {
         dispatch(minusItem(product));
     }
 
-    const removeProduct = (id: string) => {
+    const removeProduct = (id: number) => {
         dispatch(removeItem(id));
     }
 
-    const subTotalPrice = cartItems.reduce((acc, cur) => (+cur.product.price * cur.quantity) + acc, 0);
+    const subTotalPrice = cartItems.reduce((acc, cur) => (cur.product.attributes.price * cur.quantity) + acc, 0);
     const shippingPrice = 4.59;
     const totalPrice = (subTotalPrice + shippingPrice).toFixed(2);
 
@@ -55,7 +55,7 @@ const Cart = () => {
                         <CartItem
                             key={item.product.id}
                             image={REACT_APP_BACKEND_URL + item.product.attributes.image.data[0].attributes.url}
-                            name={item.product.attributes.name}
+                            name={item.product.attributes.title}
                             shortDescription={item.product.attributes.shortDescription}
                             price={item.product.attributes.price}
                             onIncrement={() => incrementProduct(item.product)}

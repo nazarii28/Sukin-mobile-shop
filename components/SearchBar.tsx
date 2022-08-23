@@ -2,13 +2,21 @@ import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-const SearchBar = () => {
+interface SearchBarProps {
+    value: string,
+    onChange: (query: string) => void
+}
+
+const SearchBar = ({value, onChange}: SearchBarProps) => {
     return (
         <View style={styles.wrapper}>
           <View style={styles.icon}>
             <FontAwesome name="search" size={20}/> 
           </View>
-          <TextInput style={styles.input} />
+          <TextInput
+              onChangeText={onChange}
+              value={value}
+              style={styles.input} />
         </View>
     )
 }
@@ -38,3 +46,7 @@ const styles = StyleSheet.create({
   
 
 export default SearchBar;
+
+function useState(arg0: string): [any, any] {
+    throw new Error('Function not implemented.');
+}

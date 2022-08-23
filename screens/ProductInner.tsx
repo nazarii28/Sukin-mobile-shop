@@ -12,14 +12,6 @@ import {addItem, minusItem} from "../features/cart/cartSlice";
 import { useGetSingleProductQuery } from '../services/products';
 import { REACT_APP_BACKEND_URL } from "@env";
 
-const slides = [
-    {
-        key: 1
-    },
-    {
-        key: 2
-    }
-]
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 const slideHeight = viewportHeight * 0.8
@@ -48,7 +40,7 @@ const ProductInner = ({navigation, route}: boolean) => {
     if(isLoading) return <View></View>
 
     const product = data.data;
-    const {title, shortDescription, price} = product.attributes;
+    const {title, shortDescription, price, description} = product.attributes;
 
     const addToCart = () => {
         dispatch(addItem({
@@ -78,7 +70,9 @@ const ProductInner = ({navigation, route}: boolean) => {
                             justifyContent: 'space-between'
                         }}
                     >
-                            <View>
+                            <View style={{
+                                flexBasis: '70%'
+                            }}>
                                 <Text style={styles.title}>{title}</Text>
                                 <Text style={styles.shortDescription}>{shortDescription}</Text>
                             </View>
@@ -159,7 +153,7 @@ const ProductInner = ({navigation, route}: boolean) => {
                             </View>
                     </View>
                     <Text style={styles.longDescription}>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora, error asperiores officiis doloremque quibusdam fuga suscipit eius! Neque animi ipsam ipsa totam obcaecati, ducimus odio, vel, tempora molestiae velit modi!
+                        {description}
                     </Text>
                 </View>
             </BottomSheet>
@@ -177,6 +171,7 @@ const styles = StyleSheet.create({
         marginTop: -50,
     },
     image: {
+        marginTop: -120,
         width: '100%',
         height: '100%',
     },

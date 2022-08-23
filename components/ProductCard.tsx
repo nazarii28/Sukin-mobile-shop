@@ -1,17 +1,29 @@
 import { Image, StyleSheet, Text, Pressable, TouchableNativeFeedback } from 'react-native';
+import Colors from '../constants/Colors';
 
 import { View } from './Themed';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import useColorScheme from "../hooks/useColorScheme";
+import {useSelector} from "react-redux";
+import {RootState} from "../store";
+import { Product } from '../types';
 
 interface ProductCardProps {
+    id: number,
     title: string,
     description?: string,
     price: string,
     image: string,
-    onPress?: () => void
+    onPress?: () => void,
+    onLike?: (isLiked: boolean) => void
 }
 
-const ProductCard = ({title, description, price, image, onPress}: ProductCardProps) => {
+const ProductCard = ({id, title, description, price, image, onPress, onLike}: ProductCardProps) => {
+
+    const colorScheme = useColorScheme();
+    const favoriteProducts = useSelector((state: RootState) => state.favorite.products)
+    const isAddedToFavorite = favoriteProducts.find((item: Product) => item.id === id);
+
     return (
         <View style={styles.wrapper}>
             <View style={styles.card}>
@@ -32,8 +44,10 @@ const ProductCard = ({title, description, price, image, onPress}: ProductCardPro
                                 <Text style={styles.price}>
                                     ${price}
                                 </Text>
-                                <Pressable style={styles.likeButton}>
-                                    <FontAwesome name="heart" color="#fff"/>  
+                                <Pressable
+                                    onPress={() => onLike(isAddedToFavorite)}
+                                    style={styles.likeButton}>
+                                    <FontAwesome name="heart" color={isAddedToFavorite ? Colors[colorScheme].backgroundLight : "#fff"}/>
                                 </Pressable>
                             </View>
                         </View>

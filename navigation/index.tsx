@@ -14,8 +14,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import HomeScreen from '../screens/Home';
 import ProductInner from '../screens/ProductInner';
 import Cart from '../screens/Cart';
 import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types';
@@ -80,7 +79,7 @@ function BottomTabNavigator() {
 
     return (
         <BottomTab.Navigator
-            initialRouteName="TabOne"
+            initialRouteName="Home"
             screenOptions={{
                 tabBarShowLabel: false,
                 tabBarStyle: {
@@ -88,13 +87,14 @@ function BottomTabNavigator() {
                     height: 65,
                     borderRadius: 20,
                     margin: 20,
+                    position: 'absolute',
                     backgroundColor: Colors[colorScheme].backgroundLight
                 },
                 tabBarActiveTintColor: Colors[colorScheme].tint,
             }}>
             <BottomTab.Screen
-                name="TabOne"
-                component={TabOneScreen}
+                name="Home"
+                component={HomeScreen}
                 options={({navigation}: RootTabScreenProps<'TabOne'>) => ({
                     headerTransparent: true,
                     title: 'Tab One',

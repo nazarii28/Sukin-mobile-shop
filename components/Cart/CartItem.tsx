@@ -5,8 +5,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface CartItemProps {
     count: number;
-    onDecrement: () => void;
-    onIncrement: () => void;
+    onDecrement?: () => void;
+    onIncrement?: () => void;
     onClose: () => void;
     image: string;
     name: string;
@@ -23,7 +23,11 @@ const CartItem = ({count, onDecrement, onIncrement, image, name, shortDescriptio
                     uri: image,
                 }}
             />
-            <View>
+            <View
+            style={{
+                flex: 1
+            }}
+            >
                 <Text style={styles.title}>
                     {name}
                 </Text>

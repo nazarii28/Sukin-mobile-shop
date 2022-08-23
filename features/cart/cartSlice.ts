@@ -19,11 +19,13 @@ const initialState: CartState = {
 
 const calculateTotalQuantity = (state: CartState) => state.cartItems.reduce((acc, cur) => cur.quantity + acc ,0)
 
+
+
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        removeItem: (state, action: PayloadAction<string>) => {
+        removeItem: (state, action: PayloadAction<number>) => {
             state.cartItems = state.cartItems.filter(item => item.product.id !== action.payload);
             state.totalQuantity = calculateTotalQuantity(state);
         },
@@ -39,7 +41,7 @@ export const cartSlice = createSlice({
         plusItem: (state, action: PayloadAction<Product>) => {
             const foundItem = state.cartItems.find(item => item.product.id === action.payload.id);
             if(foundItem) {
-                foundItem.quantity++
+                foundItem.quantity++;
             } else {
                 state.cartItems.push({
                     quantity: 1,

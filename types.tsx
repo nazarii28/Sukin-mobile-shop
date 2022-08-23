@@ -35,9 +35,9 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 >;
 
 export interface Product {
-  id: string,
+  id: number,
   attributes: {
-    name: string,
+    title: string,
     shortDescription: string,
     price: number,
     thumbnail: string,
